@@ -17,5 +17,6 @@ namespace HospitalTask.Services.Interfaces
         List<Appointment> GetWeeklyAppointments();
         List<Appointment> GetTodaysAppointments();
         List<Appointment> GetAllContinuingAppointments();
+        List<Appointment> getAppointmentsFilter(DateTime start, DateTime end);
     }
 }

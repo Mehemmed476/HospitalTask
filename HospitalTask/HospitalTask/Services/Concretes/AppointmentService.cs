@@ -1,11 +1,5 @@
 ﻿using HospitalTask.Models;
 using HospitalTask.Services.Interfaces;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection.Metadata.Ecma335;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace HospitalTask.Services.Concretes
 {
@@ -15,7 +9,7 @@ namespace HospitalTask.Services.Concretes
 
         public AppointmentService()
         {
-            appointments = new List<Appointment>();
+            appointments = [];
         }
 
         public void AddAppointment(Appointment appointment)
@@ -45,6 +39,11 @@ namespace HospitalTask.Services.Concretes
             return appointments.Where(x => x.EndDate == null).ToList();
         }
 
+        public List<Appointment> getAppointmentsFilter(DateTime start, DateTime end)
+        {
+            return appointments.Where(x => x.StartDate >= start && x.StartDate <= end).ToList();
+        }
+
         public Appointment GetAppointment(int id)
         {
             Appointment? searchingAppointment = appointments.FirstOrDefault(x => x.Id == id);
@@ -55,14 +54,14 @@ namespace HospitalTask.Services.Concretes
         {
             DateTime today = DateTime.Now.Date;
             
-            return appointments.Where(x => x.StartDate == today).ToList() ?? throw new Exception("This week we don't have any Appointments");
+            return appointments.Where(x => x.StartDate >= today).ToList() ?? throw new Exception("This week we don't have any Appointments");
         }
 
         public List<Appointment> GetWeeklyAppointments()
         {
             DateTime endOfWeek = DateTime.Now.Date;
             DateTime startOfWeek = endOfWeek.AddDays(-7);
-            return appointments.Where(x => x.StartDate > startOfWeek && x.StartDate < endOfWeek).ToList() ?? throw new Exception("Today we don't have any Appointments");
+            return appointments.Where(x => x.StartDate >= startOfWeek && x.StartDate <= endOfWeek).ToList() ?? throw new Exception("Today we don't have any Appointments");
         }
     }
 }

@@ -13,6 +13,9 @@ namespace HospitalTask
             string doctorName;
             string choice;
             int id;
+            DateTime filterStartDate;
+            DateTime filterEndDate;
+            
             Appointment appointment = null;
             AppointmentService service = new AppointmentService();
             while (running)
@@ -28,11 +31,13 @@ namespace HospitalTask
                     4. Bu həftəki appointment-lərə bax
                     5. Bugünki appointment-lərə bax
                     6. Bitməmiş appointmentlərə bax
-                    7. Menudan çıx
+                    7. Id-ə görə appointmentə bax
+                    8. Fitlerə əsasən appointmentlərə bax
+                    9. Menudan çıx
 
                     """);
 
-                Console.Write("Select an Option(1-7): ");
+                Console.Write("Select an Option(1-9): ");
                 choice = Console.ReadLine();
 
                 switch (choice)
@@ -87,8 +92,30 @@ namespace HospitalTask
                         openAppointments.ForEach(appointment => Console.WriteLine($"ID: {appointment.Id} \nPatient Name: {appointment.PatientName} \nDoctor Name: {appointment.DoctorName} \nStart Date: {appointment.StartDate} \nEnd Date: {appointment.EndDate}"));
                         Thread.Sleep(2000);
                         break;
-
+                    
                     case "7":
+                        Console.Write("Please send ID: ");
+                        id = int.Parse(Console.ReadLine()); 
+                        
+                        Appointment searchingAppointment = service.GetAppointment(id);
+                        Console.WriteLine(
+                            $"ID: {searchingAppointment.Id} \nPatient Name: {searchingAppointment.PatientName} \nDoctor Name: {searchingAppointment.DoctorName} \nStart Date: {searchingAppointment.StartDate} \nEnd Date: {searchingAppointment.EndDate}"); 
+                        Thread.Sleep(2000);
+                        break;
+                    
+                    case "8":
+                        Console.Write("Please send Start: ");
+                        filterStartDate = DateTime.Parse(Console.ReadLine());
+                        Console.Write("Please send End: ");
+                        filterEndDate = DateTime.Parse(Console.ReadLine());
+
+                        List<Appointment> filterAppointments = [];
+                        filterAppointments = service.getAppointmentsFilter(filterStartDate, filterEndDate);
+                        filterAppointments.ForEach(appointment => Console.WriteLine($"ID: {appointment.Id} \nPatient Name: {appointment.PatientName} \nDoctor Name: {appointment.DoctorName} \nStart Date: {appointment.StartDate} \nEnd Date: {appointment.EndDate}"));
+                        Thread.Sleep(2000);
+                        break;
+                    
+                    case "9":
                         running = false;
                         Console.WriteLine("Good Bye!!!");
                         Thread.Sleep(2000);
